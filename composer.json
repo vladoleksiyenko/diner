@@ -1,0 +1,12 @@
+{
+  "name": "voleksiyenko/328/diner",
+  "authors": [
+    {
+      "name": "Vlad Oleksiyenko",
+      "email": "vladolek2003@gmail.com"
+    }
+  ],
+  "require": {
+    "bcosca/fatfree-core": "dev-master"
+  }
+}
