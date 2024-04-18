@@ -44,9 +44,17 @@ $f3->route('GET|POST /order1', function($f3) {
         $food = $_POST['food'];
         $meal = $_POST['meal'];
 
-        if (true) {
+        if (!empty($food) && !empty($meal)) {
+
+            // Add the data to the session array
             $f3 -> set('SESSION.food', $food);
             $f3 -> set('SESSION.meal', $meal);
+
+            // Send the user to the next form
+            $f3 -> reroute('order2');
+        } else {
+            // temporary
+            echo "<p>Validation Errors</p>";
         }
     }
     // Render a view page
@@ -54,7 +62,9 @@ $f3->route('GET|POST /order1', function($f3) {
     echo $view->render('views/order1.html');
 });
 
-$f3->route('GET|POST /order2', function() {
+$f3->route('GET /order2', function($f3) {
+
+    var_dump($f3 -> get('SESSION'));
 
     // Render a view page
     $view = new Template();
