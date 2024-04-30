@@ -133,6 +133,9 @@ $f3->route('GET|POST /order2', function($f3) {
         }
     }
 
+    $condiments = getCondiments();
+    $f3 -> set('conds', $condiments);
+
     // Render a view page
     $view = new Template();
     echo $view->render('views/order2.html');
