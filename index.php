@@ -12,6 +12,7 @@ require_once ('vendor/autoload.php');
 
 // Require the necessary files
 require_once ('model/data-layer.php');
+require_once ('model/validate.php');
 
 // Instantiate the F3 Base class
 $f3 = Base::instance();
@@ -67,6 +68,10 @@ $f3->route('GET /summary', function($f3) {
 $f3->route('GET|POST /order1', function($f3) {
     //echo '<h1>My Breakfast Menu</h1>';
 
+    // Initialize variables
+    $userFood = "";
+    $userMeal = "";
+
     // If the form has been posted
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
@@ -74,23 +79,25 @@ $f3->route('GET|POST /order1', function($f3) {
         //var_dump ($_POST);
 
         // Get the data from the post array
-        $food = $_POST['food'];
-        $meal = $_POST['meal'];
-
-        // If the data valid
-        if (true) {
-
-            // Add the data to the session array
-            $f3->set('SESSION.food', $food);
-            $f3->set('SESSION.meal', $meal);
-
-            // Send the user to the next form
-            $f3->reroute('order2');
+        if (validFood($_POST['food'])) {
+            $food = $_POST['food'];
+        } else {
+            $f3 -> set('errors["food"]', 'Please enter a food');
         }
-        else {
-            // Temporary
-            echo "<p>Validation errors</p>";
+
+        if (isset($_POST['meal'])) {
+            $meal = $_POST['meal'];
+        } else {
+            echo "meal not set";
         }
+
+
+        // Add the data to the session array
+        $f3->set('SESSION.food', $food);
+        $f3->set('SESSION.meal', $meal);
+
+        // Send the user to the next form
+        $f3->reroute('order2');
     }
 
     // Get the data from the model
