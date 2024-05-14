@@ -13,6 +13,10 @@
             <label for="food" class="col-sm-4 control-label">What food would you like to order?</label>
             <div class="col-sm-4"><input class="form-control" type="text"
                                          name="food" id="food" ></div>
+
+            <check if="{{ isset(@errors['food']) }}">
+                <span class="err text-danger">{{ @errors['food'] }}</span>
+            </check>
         </div>
         <br>
 
@@ -25,6 +29,9 @@
                         <input type="radio" name="meal" value = "{{@meal}}">{{ @meal }}
                     </label><br>
                 </repeat>
+                <check if="{{ isset(@errors['meal']) }}">
+                    <span class="err text-danger">{{ @errors['meal'] }}</span>
+                </check>
             </div>
         </div>
         <br>

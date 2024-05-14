@@ -14,6 +14,15 @@ require_once ('vendor/autoload.php');
 require_once ('model/data-layer.php');
 require_once ('model/validate.php');
 
+/* Test the Order class*/
+//$order = new Order("pad thai", "lunch", ['soy sauce']);
+//var_dump($order);
+//$order2 = new Order();
+//$order2 ->setFood('nachos');
+//$order2->setMeal('dinner');
+//$order2->setCondiments(['salsa', 'guacamole']);
+//var_dump($order2);
+
 // Instantiate the F3 Base class
 $f3 = Base::instance();
 
@@ -62,6 +71,7 @@ $f3->route('GET /summary', function($f3) {
     // Render a view page
     $view = new Template();
     echo $view->render('views/order-summary.html');
+    session_destroy();
 });
 
 // Order Form Part I
@@ -79,30 +89,33 @@ $f3->route('GET|POST /order1', function($f3) {
         //var_dump ($_POST);
 
         // Get the data from the post array
-        if (validFood($_POST['food'])) {
+        if (Validate::validFood($_POST['food'])) {
             $food = $_POST['food'];
         } else {
             $f3 -> set('errors["food"]', 'Please enter a food');
         }
 
-        if (isset($_POST['meal'])) {
+
+        if (isset($_POST['meal']) and Validate::validMeal($_POST['meal'])) {
             $meal = $_POST['meal'];
         } else {
-            echo "meal not set";
+            $f3 -> set('errors["meals"]', 'Please select a meal');
         }
 
 
         // Add the data to the session array
-        $f3->set('SESSION.food', $food);
-        $f3->set('SESSION.meal', $meal);
+        $order = new Order($food, $meal);
+        $f3->set('SESSION.order', $order);
 
         // Send the user to the next form
-        $f3->reroute('order2');
+        if (empty($f3 -> get('errors'))) {
+            $f3 -> reroute('order2');
+        }
     }
 
     // Get the data from the model
     // and add it to the F3 hive
-    $meals = getMeals();
+    $meals = DataLayer::getMeals();
     $f3 -> set('meals', $meals);
 
     // Render a view page
@@ -129,7 +142,7 @@ $f3->route('GET|POST /order2', function($f3) {
         if (true) {
 
             // Add the data to the session array
-            $f3->set('SESSION.condiments', $condiments);
+            $f3->get('SESSION.order')->setCondiments($condiments);
 
             // Send the user to the next form
             $f3->reroute('summary');
@@ -140,7 +153,7 @@ $f3->route('GET|POST /order2', function($f3) {
         }
     }
 
-    $condiments = getCondiments();
+    $condiments = DataLayer::getCondiments();
     $f3 -> set('conds', $condiments);
 
     // Render a view page

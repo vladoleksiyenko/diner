@@ -1,12 +1,16 @@
 <?php
 
 /* This belongs to the model */
+class DataLayer{
+    // Get the meals for the diner app
+    static function getMeals() {
+        return array('breakfast', 'lunch', 'dinner', 'dessert');
+    }
 
-// Get the meals for the diner app
-function getMeals() {
-    return array('breakfast', 'lunch', 'dinner', 'dessert');
+    static function getCondiments() {
+        return array('ketchup', 'mustard', 'bbq');
+    }
 }
 
-function getCondiments() {
-    return array('ketchup', 'mustard', 'bbq');
-}
+
+
