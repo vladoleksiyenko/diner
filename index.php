@@ -10,10 +10,6 @@ error_reporting(E_ALL);
 // Require the autoload file
 require_once ('vendor/autoload.php');
 
-// Require the necessary files
-require_once ('model/data-layer.php');
-require_once ('model/validate.php');
-
 /* Test the Order class*/
 //$order = new Order("pad thai", "lunch", ['soy sauce']);
 //var_dump($order);
